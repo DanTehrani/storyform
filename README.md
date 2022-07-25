@@ -7,4 +7,4 @@
 - Answer a survey amid proving your reputation without revealing your identity.
 
 ## How it works
-- Respondents submit their answer (i.e. upload their answer to a decentralized storage), and attest a proof of membership to that submission.
+- Respondents submit their answer (i.e. upload their answer to a decentralized storage), and attest a zk proof of identity to that submission.
