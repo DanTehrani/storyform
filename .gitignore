@@ -1,0 +1,7 @@
+node_modules/
+.cargo
+.rustup
+circom/
+.node_repl_history
+
+*.ptau
