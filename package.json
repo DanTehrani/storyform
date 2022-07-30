@@ -1,0 +1,11 @@
+{
+  "name": "zk-survey",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/DanTehrani/zk-survey.git",
+  "author": "Daniel Tehrani <contact@dantehrani.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "circomlib": "^2.0.5"
+  }
+}

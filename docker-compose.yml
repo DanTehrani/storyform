@@ -1,8 +1,10 @@
-version: "3"
+version: '3'
 
 services:
-  zksurvey:
+  circom:
     build: .
     tty: true
     volumes:
       - ./:/root
+      - /root/.cargo
+      - /root/node_modules
