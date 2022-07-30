@@ -3,5 +3,3 @@ node_modules/
 .rustup
 circom/
 .node_repl_history
-
-*.ptau
