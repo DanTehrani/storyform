@@ -9,3 +9,5 @@ circom/
 .config/
 artifacts/
 cache/
+
+typechain-types/
