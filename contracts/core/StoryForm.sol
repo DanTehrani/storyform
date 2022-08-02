@@ -1,38 +1,60 @@
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
+import "@semaphore-protocol/contracts/interfaces/IVerifier.sol";
+import "@semaphore-protocol/contracts/base/SemaphoreCore.sol";
+import "@semaphore-protocol/contracts/base/SemaphoreGroups.sol";
 
-interface IVerifier {
+interface IStoryFormVerifier {
     function verifyProof(
         uint[2] memory a,
         uint[2][2] memory b,
         uint[2] memory c,
-        uint[3] memory input
+        uint[2] memory input
     ) external view returns (bool);
 }
 
+contract StoryForm is SemaphoreCore, SemaphoreGroups {
+    IStoryFormVerifier public storyFormVerifier;
+    IVerifier public semaphoreVerifier;
 
+    uint256 constant semaphoreConstantNullifierHash = 0;
+    bytes32 constant semaphoreConstantSignal = 0;
 
-contract StoryForm {
-    IVerifier public verifier;
+    event ProofVerified(uint256 indexed submissionId, uint256 indexed groupId);
+    mapping(uint256 => uint256) blockHeightToMerkleRoot;
+    address[] members; // Store the 
 
-    event ProofVerified(uint256 indexed submissionId);
-
-    constructor(address verifierAddress) {
-       verifier = IVerifier(verifierAddress);
+    constructor(IStoryFormVerifier _storyFormVerifier, IVerifier _semaphoreVerifier) {
+       storyFormVerifier = _storyFormVerifier;
+       semaphoreVerifier = _semaphoreVerifier;
+    }
+ 
+    function _verifyMembershipProof(uint256 groupId, uint256[8] calldata proof) internal view {
+        uint256 root = groups[groupId].root;
+        _verifyProof(semaphoreConstantSignal, root, semaphoreConstantNullifierHash, groupId, proof, semaphoreVerifier);
     }
 
-    function veirfyProof(
-        uint256[8] calldata proof,
-        uint256 formId,
-        uint256 submissionId,
-        uint256 merkleRoot
-    ) external {
+    function _verifyDataOwnershipProof(uint256 formId, uint256 submissionId, uint256[8] calldata proof) internal view {
+// Verify data ownership proof
         uint256[2] memory a =[proof[0], proof[1]];
         uint256[2][2] memory b = [[proof[2], proof[3]], [proof[4], proof[5]]];
         uint256[2] memory c = [proof[6], proof[7]];
-        uint256[3] memory input = [formId, submissionId, merkleRoot];
+        uint256[2] memory input = [formId, submissionId];
+        require(storyFormVerifier.verifyProof(a, b, c, input) == true);
+    }
 
-        require(verifier.verifyProof(a, b, c, input) == true, "Invalid proof");
-        emit ProofVerified(submissionId);
-    }   
+    function veirfyProof(
+        uint256 formId,
+        uint256 groupId,
+        uint256 submissionId,
+        uint256[8] calldata membershipProof,
+        uint256[8] calldata submissionOwnershipProof
+    ) external {
+
+        _verifyMembershipProof(groupId, membershipProof);
+        _verifyDataOwnershipProof(formId, submissionId, submissionOwnershipProof);
+        
+        emit ProofVerified(submissionId, groupId);
+    }
 }
 
