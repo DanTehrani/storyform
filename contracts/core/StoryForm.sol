@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.9;
 import "@semaphore-protocol/contracts/interfaces/IVerifier.sol";
 import "@semaphore-protocol/contracts/base/SemaphoreCore.sol";
