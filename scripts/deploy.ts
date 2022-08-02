@@ -1,18 +1,23 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  const Verifier = await ethers.getContractFactory("Verifier");
+  const verifier = await Verifier.deploy();
+  await verifier.deployed();
 
-  const lockedAmount = ethers.utils.parseEther("1");
+  const SemaphoreVerifier = await ethers.getContractFactory("SemaphoreVerifier16");
 
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  const semaphoreVerifier = await SemaphoreVerifier.deploy();
+  await semaphoreVerifier.deployed();
 
-  await lock.deployed();
 
-  console.log("Lock with 1 ETH deployed to:", lock.address);
+  console.log(`Deployed SemaphoreVerifier to: ${semaphoreVerifier.address}`)
+
+  const StoryForm = await ethers.getContractFactory("StoryForm");
+  const storyForm = await StoryForm.deploy(verifier.address, semaphoreVerifier.address);
+  await storyForm.deployed();
+
+  console.log(`Deployed StoryForm to: ${storyForm.address}`)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
