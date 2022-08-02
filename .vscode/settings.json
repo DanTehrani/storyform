@@ -9,5 +9,8 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "cSpell.words": []
+  "cSpell.words": [],
+  "[solidity]": {
+    "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
+  }
 }
