@@ -4,6 +4,8 @@ services:
   circom:
     build: .
     tty: true
+    ports:
+      - 8545:8545
     volumes:
       - ./:/root
       - /root/.cargo
