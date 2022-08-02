@@ -12,5 +12,6 @@ RUN cargo install --path circom
 
 ENV PATH=/root/.cargo/bin:$PATH
 
+WORKDIR /root
 RUN yarn
 RUN yarn global add snarkjs
