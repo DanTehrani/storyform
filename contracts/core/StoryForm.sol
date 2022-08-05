@@ -75,4 +75,12 @@ contract StoryForm is SemaphoreCore, SemaphoreGroups {
 
     emit ProofVerified(submissionId, groupId);
   }
+
+  function createGroup(uint256 groupId, uint8 depth) external {
+    _createGroup(groupId, depth, 0);
+  }
+
+  function addMember(uint256 groupId, uint256 identityCommitment) external {
+    _addMember(groupId, identityCommitment);
+  }
 }
