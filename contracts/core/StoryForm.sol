@@ -19,7 +19,7 @@ contract StoryForm is SemaphoreCore, SemaphoreGroups {
   IVerifier public semaphoreVerifier;
 
   uint256 constant semaphoreConstantNullifierHash = 0;
-  bytes32 constant semaphoreConstantSignal = 0;
+  bytes32 constant semaphoreConstantSignal = "0";
 
   event ProofVerified(uint256 indexed submissionId, uint256 indexed groupId);
   mapping(uint256 => uint256) blockHeightToMerkleRoot;
@@ -33,15 +33,17 @@ contract StoryForm is SemaphoreCore, SemaphoreGroups {
     semaphoreVerifier = _semaphoreVerifier;
   }
 
-  function _verifyMembershipProof(uint256 groupId, uint256[8] calldata proof)
-    internal
-    view
-  {
+  function _verifyMembershipProof(
+    uint256 groupId,
+    uint256 nullifierHash,
+    uint256[8] calldata proof
+  ) internal view {
     uint256 root = groups[groupId].root;
+
     _verifyProof(
       semaphoreConstantSignal,
       root,
-      semaphoreConstantNullifierHash,
+      nullifierHash,
       groupId,
       proof,
       semaphoreVerifier
@@ -58,19 +60,22 @@ contract StoryForm is SemaphoreCore, SemaphoreGroups {
     uint256[2][2] memory b = [[proof[2], proof[3]], [proof[4], proof[5]]];
     uint256[2] memory c = [proof[6], proof[7]];
     uint256[2] memory input = [formId, submissionId];
-    console.log(input[0]);
-    console.log(input[1]);
-    require(storyFormVerifier.verifyProof(a, b, c, input) == true);
+    require(
+      storyFormVerifier.verifyProof(a, b, c, input) == true,
+      "Invlid dataownership proof"
+    );
   }
 
-  function veirfyProof(
+  // Probably need to pass merkle root as the arguemnt
+  function verifyProof(
     uint256 formId,
     uint256 groupId,
     uint256 submissionId,
+    uint256 nullifierHash,
     uint256[8] calldata membershipProof,
     uint256[8] calldata submissionOwnershipProof
   ) external {
-    _verifyMembershipProof(groupId, membershipProof);
+    _verifyMembershipProof(groupId, nullifierHash, membershipProof);
     _verifyDataOwnershipProof(formId, submissionId, submissionOwnershipProof);
 
     emit ProofVerified(submissionId, groupId);

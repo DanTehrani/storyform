@@ -1,5 +1,7 @@
 import { poseidon_gencontract as poseidonContract } from "circomlibjs";
 import { ethers } from "hardhat";
+import { Identity } from "@semaphore-protocol/identity";
+import { GROUP_ID, GROUP_DEPTH } from "../config";
 
 async function main() {
   // First, deploy the following libraries
@@ -52,6 +54,21 @@ async function main() {
   await storyForm.deployed();
 
   console.log(`Deployed StoryForm to ${storyForm.address}`);
+
+  // Create group
+
+  // Add members to group
+  const createGroupTx = await storyForm.createGroup(GROUP_ID, GROUP_DEPTH);
+  await createGroupTx.wait();
+
+  const identity = new Identity("secret");
+
+  const addMemberTx = await storyForm.addMember(
+    GROUP_ID,
+    identity.generateCommitment()
+  );
+
+  await addMemberTx.wait();
 }
 
 // We recommend this pattern to be able to use async/await everywhere
