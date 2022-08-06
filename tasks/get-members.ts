@@ -3,10 +3,10 @@ import { GROUP_ID, STORY_FORM_ADDRESS } from "../config";
 
 task("getMembers")
   .addParam("gid", "groupId")
-  .setAction(async ({ gid }, { ethers }) => {
+  .setAction(async ({ gid }, { ethers, network }) => {
     const contract = await ethers.getContractAt(
       "StoryForm",
-      STORY_FORM_ADDRESS
+      STORY_FORM_ADDRESS[network.name]
     );
 
     const events = await contract.queryFilter(

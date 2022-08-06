@@ -51,24 +51,10 @@ async function main() {
     verifier.address,
     semaphoreVerifier.address
   );
+
   await storyForm.deployed();
 
   console.log(`Deployed StoryForm to ${storyForm.address}`);
-
-  // Create group
-
-  // Add members to group
-  const createGroupTx = await storyForm.createGroup(GROUP_ID, GROUP_DEPTH);
-  await createGroupTx.wait();
-
-  const identity = new Identity("secret");
-
-  const addMemberTx = await storyForm.addMember(
-    GROUP_ID,
-    identity.generateCommitment()
-  );
-
-  await addMemberTx.wait();
 }
 
 // We recommend this pattern to be able to use async/await everywhere

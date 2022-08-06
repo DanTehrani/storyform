@@ -1,7 +1,9 @@
+import "dotenv/config";
 import "@nomiclabs/hardhat-solhint";
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "./tasks/add-member";
+import "./tasks/create-group";
 import "./tasks/get-members";
 
 const config: HardhatUserConfig = {
@@ -16,25 +18,14 @@ const config: HardhatUserConfig = {
     ]
   },
   networks: {
-    arbitrum: {
-      url: "https://arbitrumrpc.com",
-      accounts: []
-    },
     goerli: {
-      url: "https://eth-goerli.g.alchemy.com/v2/PT2E3_7VyBJKUCSi_46fGUjKO0bC0auG"
+      url: `https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+      // @ts-ignore
+      accounts: [process.env.WALLET_PRIVATE_KEY]
     }
-    /*
-    hardhat: {
-      forking: {
-        url: "https://eth-goerli.g.alchemy.com/v2/PT2E3_7VyBJKUCSi_46fGUjKO0bC0auG"
-        //        blockNumber: 6976744
-      },
-      allowUnlimitedContractSize: true
-    }
-    */
   },
   etherscan: {
-    apiKey: "8YHC8V5XKJCHE8QDU4I8ZD7JW773Z6GNCJ"
+    apiKey: process.env.ETHERSCAN_API_KEY
   }
 };
 
