@@ -2,6 +2,7 @@ import "@nomiclabs/hardhat-solhint";
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "./tasks/add-member";
+import "./tasks/get-members";
 
 const config: HardhatUserConfig = {
   solidity: {

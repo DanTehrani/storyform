@@ -3,13 +3,14 @@ import { GROUP_ID, STORY_FORM_ADDRESS } from "../config";
 
 task("addMember")
   .addParam("ic", "identityCommitment")
-  .setAction(async ({ identityCommitment }, { ethers }) => {
+  .setAction(async ({ ic }, { ethers }) => {
     const contract = await ethers.getContractAt(
       "StoryForm",
       STORY_FORM_ADDRESS
     );
 
-    const tx = await contract.addMember(GROUP_ID, identityCommitment);
+    const tx = await contract.addMember(GROUP_ID, ic);
     await tx.wait();
-    console.log(`Added identityCommitment ${identityCommitment}`);
+    console.log(`Added identityCommitment ${ic}`);
+    console.log(tx);
   });
