@@ -1,13 +1,14 @@
-# zkSurvey
+<div align="center">
+  <h1>ZK Survey</h1>
+</div>
 
-## Creating a survey
-- Create a public survey with arbitrary respondent criteria.
 
-## Answering a survey
-- Answer a survey amid proving your reputation without revealing your identity.
+## Summary
+ZK Survey is a survey tool akin to Google Forms or Typeform, but with the ability to conduct surveys which a respondants can **answer anonymousely** while **proving their answers' trustworthiness without revealing their identity**. It is also **highly composable**; both surveys and answers resides on Arweave, and the reputation verification is concluded in a smart contract on Ethereum.
 
-## How it works
-- Respondents submit their answer (i.e. upload their answer to a decentralized storage), and attest a zk proof of identity to that submission.
+## Why
+TBD
 
-## Other
-- Using [Ptau files](https://github.com/iden3/snarkjs) provided by iden3.
+
+## Demo
+TBD
