@@ -4,7 +4,6 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "./tasks/add-member";
 import "./tasks/create-group";
-import "./tasks/get-members";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -25,7 +24,9 @@ const config: HardhatUserConfig = {
     }
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY
+    apiKey: {
+      goerli: process.env.ETHERSCAN_API_KEY || ""
+    }
   }
 };
 
