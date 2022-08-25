@@ -1,6 +1,9 @@
+
 <div align="center">
   <h1>Storyform (zk survey)</h1>
 </div>
+
+**_The current [deployed version](https://story-form-interface.vercel.app/) of Storyform does not use any circuits nor smart contracts in this repo. Circuits and smart contracts are under develompent._**
 
 
 ## Summary
