@@ -4,7 +4,7 @@ import "@semaphore-protocol/contracts/interfaces/IVerifier.sol";
 import "hardhat/console.sol";
 import "./ECDSAMembershipManager.sol";
 
-interface IStoryFormVerifier {
+interface IStoryformVerifier {
   function verifyProof(
     uint256[2] memory a,
     uint256[2][2] memory b,
@@ -13,7 +13,7 @@ interface IStoryFormVerifier {
   ) external view returns (bool);
 }
 
-contract StoryForm is ECDSAMembershipManager {
+contract Storyform is ECDSAMembershipManager {
   IStoryFormVerifier public storyFormVerifier;
   IECDSAMembershipVerifier public ecdsaMembershipVerifier;
   IDeployedSemaphore public semaphore;
