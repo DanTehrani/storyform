@@ -1,9 +1,8 @@
-//SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.9;
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
 import "@semaphore-protocol/contracts/interfaces/IVerifier.sol";
-import "@semaphore-protocol/contracts/base/SemaphoreCore.sol";
-import "@semaphore-protocol/contracts/base/SemaphoreGroups.sol";
 import "hardhat/console.sol";
+import "./ECDSAMembershipManager.sol";
 
 interface IStoryFormVerifier {
   function verifyProof(
@@ -14,40 +13,26 @@ interface IStoryFormVerifier {
   ) external view returns (bool);
 }
 
-contract StoryForm is SemaphoreCore, SemaphoreGroups {
+contract StoryForm is ECDSAMembershipManager {
   IStoryFormVerifier public storyFormVerifier;
-  IVerifier public semaphoreVerifier;
+  IECDSAMembershipVerifier public ecdsaMembershipVerifier;
+  IDeployedSemaphore public semaphore;
 
   uint256 constant semaphoreConstantNullifierHash = 0;
   bytes32 constant semaphoreConstantSignal = "0";
 
   event ProofVerified(uint256 indexed submissionId, uint256 indexed groupId);
-  mapping(uint256 => uint256) blockHeightToMerkleRoot;
-  address[] members; // Store the
 
   constructor(
-    IStoryFormVerifier _storyFormVerifier,
-    IVerifier _semaphoreVerifier
+    address storyFormVerifierAddress,
+    address ecdsaMembershipVerifierAddress,
+    address semaphoreAddress
   ) {
-    storyFormVerifier = _storyFormVerifier;
-    semaphoreVerifier = _semaphoreVerifier;
-  }
-
-  function _verifyMembershipProof(
-    uint256 groupId,
-    uint256 nullifierHash,
-    uint256[8] calldata proof
-  ) internal view {
-    uint256 root = groups[groupId].root;
-
-    _verifyProof(
-      semaphoreConstantSignal,
-      root,
-      nullifierHash,
-      groupId,
-      proof,
-      semaphoreVerifier
+    storyFormVerifier = IStoryFormVerifier(storyFormVerifierAddress);
+    ecdsaMembershipVerifier = IECDSAMembershipVerifier(
+      ecdsaMembershipVerifierAddress
     );
+    semaphore = IDeployedSemaphore(semaphoreAddress);
   }
 
   function _verifyDataOwnershipProof(
@@ -66,26 +51,24 @@ contract StoryForm is SemaphoreCore, SemaphoreGroups {
     );
   }
 
-  // Probably need to pass merkle root as the arguemnt
+  // Verify both submission ownership proof and group membership proof
   function verifyProof(
     uint256 formId,
     uint256 groupId,
     uint256 submissionId,
-    uint256 nullifierHash,
     uint256[8] calldata membershipProof,
     uint256[8] calldata submissionOwnershipProof
   ) external {
-    _verifyMembershipProof(groupId, nullifierHash, membershipProof);
+    require(
+      _veirfyECDSAMembership(
+        groupId,
+        membershipProof,
+        ecdsaMembershipVerifier,
+        semaphore
+      )
+    );
     _verifyDataOwnershipProof(formId, submissionId, submissionOwnershipProof);
 
     emit ProofVerified(submissionId, groupId);
-  }
-
-  function createGroup(uint256 groupId, uint8 depth) external {
-    _createGroup(groupId, depth, 0);
-  }
-
-  function addMember(uint256 groupId, uint256 identityCommitment) external {
-    _addMember(groupId, identityCommitment);
   }
 }
