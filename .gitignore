@@ -11,5 +11,8 @@ artifacts/
 cache/
 
 typechain-types/
+*_js/
+*.r1cs
+*.ptau
 
 .env
