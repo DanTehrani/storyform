@@ -5,7 +5,7 @@ task("addMember")
   .addParam("ic", "identityCommitment")
   .setAction(async ({ ic }, { ethers, network }) => {
     const contract = await ethers.getContractAt(
-      "StoryForm",
+      "Storyform",
       STORY_FORM_ADDRESS[network.name]
     );
 

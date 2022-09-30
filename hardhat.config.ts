@@ -17,6 +17,12 @@ const config: HardhatUserConfig = {
     ]
   },
   networks: {
+    hardhat: {
+      forking: {
+        url: `https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+        blockNumber: 7622046 // One block before the block where Semaphore.sol was deployed
+      }
+    },
     goerli: {
       url: `https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
       // @ts-ignore

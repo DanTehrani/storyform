@@ -8,3 +8,6 @@ export const STORY_FORM_ADDRESS: {
 };
 export const DEV_FORM_ID = "";
 export const DEV_SUBMISSION_ID = "";
+export const SEMAPHORE_ADDRESS = {
+  goerli: "0xE585f0Db9aB24dC912404DFfb9b28fb8BF211fA6"
+};
