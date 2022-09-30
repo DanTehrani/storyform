@@ -1,6 +1,6 @@
 pragma circom 2.0.6;
 
-include "../ecdsa_verify.circom";
+include "./ecdsa_verify.circom";
 include "./tree.circom";
 
 template ProofOfMembership(n, k, nLevels) {
