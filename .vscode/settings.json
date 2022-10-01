@@ -9,7 +9,7 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "cSpell.words": [],
+  "cSpell.words": ["Storyform"],
   "[solidity]": {
     "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
   }
