@@ -1,25 +1,32 @@
-pragma circom 2.0.6;
+pragma circom 2.0.2;
 
 include "./circom-ecdsa-circuits/ecdsa.circom";
 include "./circom-ecdsa-circuits/zk-identity/eth.circom";
 include "./tree.circom";
-
+include "../node_modules/circomlib/circuits/poseidon.circom";
 
 template FullVerifyProofOfMembership(n, k, nLevels) {
     signal input r[k];
     signal input s[k];
-    signal input msghash[k];
+    signal input msg[k]; // Secret message that was signed
     signal input pubkey[2][k];
     signal input pathIndices[nLevels];
     signal input siblings[nLevels];
     signal input root;
+    signal input hash;
+
+    component poseidon = Poseidon(k);
+    for (var i = 0; i < k; i++) {
+        poseidon.inputs[i] <== msg[i];
+    }
+    poseidon.out === hash;
 
     component ecdsaVerify = ECDSAVerifyNoPubkeyCheck(n, k);
 
     for (var i = 0; i < k; i++) {
         ecdsaVerify.r[i] <== r[i];
         ecdsaVerify.s[i] <== s[i];
-        ecdsaVerify.msghash[i] <== msghash[i];
+        ecdsaVerify.msghash[i] <== msg[i];
         ecdsaVerify.pubkey[0][i] <== pubkey[0][i];
         ecdsaVerify.pubkey[1][i] <== pubkey[1][i];
     }

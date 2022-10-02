@@ -16,3 +16,5 @@ typechain-types/
 *.ptau
 
 .env
+*.zkey
+verification_key.json
