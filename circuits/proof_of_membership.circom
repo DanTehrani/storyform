@@ -1,4 +1,4 @@
-pragma circom 2.0.6;
+pragma circom 2.0.3;
 
 include "./ecdsa_verify.circom";
 include "./tree.circom";
@@ -8,7 +8,14 @@ template ProofOfMembership(n, k, nLevels) {
     signal input negMsgMultModInvR[k]; // -(msg * r^-1)
     signal input pathIndices[nLevels];
     signal input siblings[nLevels];
+    signal input hash;
     signal input root;
+
+    component poseidon = Poseidon(k);
+    for (var i = 0; i < k; i++) {
+        poseidon.inputs[i] <== negMsgMultModInvR[i];
+    }
+    poseidon.out === hash;
 
     component ecdsaVerify = EcdsaVerify(n, k);
 
@@ -28,3 +35,5 @@ template ProofOfMembership(n, k, nLevels) {
 
     root === inclusionProof.root;
 }
+
+component main { public [root, hash, modInvRMultPubKey2] } = ProofOfMembership(64, 4, 10);
