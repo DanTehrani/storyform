@@ -1,4 +1,4 @@
-pragma circom 2.0.6;
+pragma circom 2.0.3;
 include "./circom-ecdsa-circuits/bigint_func.circom";
 include "./circom-ecdsa-circuits/ecdsa.circom";
 include "./circom-ecdsa-circuits/zk-identity/eth.circom";
